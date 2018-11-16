@@ -98,8 +98,8 @@ class HTML_Scraper {
 		}
 	}
 
-	public function querySelector_innerHTML(string $expr, int $item = 0) {
-		$node = $this->querySelector($expr, $item);
+	public function querySelector_innerHTML(string $selector, int $item = 0) {
+		$node = $this->xpath(static::CSS_to_Xpath($selector), $item);
 		if($node === NULL) {
 			return NULL;
 		} else {
@@ -107,8 +107,8 @@ class HTML_Scraper {
 		}
 	}
 
-	public function querySelector_outerHTML(string $expr, int $item = 0) {
-		$node = $this->querySelector($expr, $item);
+	public function querySelector_outerHTML(string $selector, int $item = 0) {
+		$node = $this->xpath(static::CSS_to_Xpath($selector), $item);
 		if($node === NULL) {
 			return NULL;
 		} else {
@@ -116,8 +116,8 @@ class HTML_Scraper {
 		}
 	}
 
-	public function querySelector_textContent(string $expr, int $item = 0) {
-		$node = $this->querySelector($expr, $item);
+	public function querySelector_textContent(string $selector, int $item = 0) {
+		$node = $this->xpath(static::CSS_to_Xpath($selector), $item);
 		if($node === NULL) {
 			return NULL;
 		} else {
