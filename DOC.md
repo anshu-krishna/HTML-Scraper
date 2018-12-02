@@ -6,8 +6,9 @@
 	`$source` can be of type `DOMNodeList`, `DOMNode` or `string`.
 
 	**Returns:**  
+	
 	| Type | Description |
-	|------|-------------|
+	|---|---|
 	| `array` | When `$source` is an instance of `DOMNodeList` then returns an `array` of `HTML_Scraper` objects. |
 	| `HTML_Scraper` | When `$source` is an instance of `DOMNode` or a `string` |
 
@@ -62,7 +63,7 @@
 
 	**Returns:**  
 	| Type | Description |
-	|------|-------------|
+	|---|---|
 	| `NULL` | When no nodes matches the XPath path expression |
 	| `DOMNodeList` | When no `...$items` are passed |
 	| `DOMNode` | When only one `...$items` is passed |
