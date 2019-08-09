@@ -82,6 +82,9 @@ final class HTML_Scraper {
 				return $nodes;
 				break;
 			case ($icount === 1):
+				if($items[0] < 0) {
+					return $nodes->item($nodes->length + $items[0]);
+				}
 				return $nodes->item($items[0]);
 				break;
 			default:
