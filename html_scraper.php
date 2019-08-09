@@ -6,6 +6,11 @@ Date: 22-Nov-2018
 Description: Set of PHP classes for simplifing data extraction from HTML.
  */
 final class HTML_Scraper {
+	const Extract_innerHTML = 'innerHTML';
+	const Extract_outerHTML = 'outerHTML';
+	const Extract_textContent = 'textContent';
+	const Extract_textContentTrim = 'textContentTrim';
+	
 	private static function map_node($type, &$node) {
 		if(!($node instanceof DOMNode)) {
 			return NULL;
@@ -161,7 +166,7 @@ final class HTML_Scraper {
 				}
 				break;
 			default:
-				trigger_error('Invalid mapper value in xpath_extract', E_USER_WARNING);
+				trigger_error('Invalid mapper value in querySelector_extract', E_USER_WARNING);
 				return NULL;
 				break;
 		}

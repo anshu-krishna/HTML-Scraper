@@ -25,7 +25,7 @@
 <header>CSS</header>
 <header>XPath</header>
 <?php
-require_once 'html_scraper.php';
+require_once '../html_scraper.php';
 $examples = [
 	'div',
 	'div.abc',

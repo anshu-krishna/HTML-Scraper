@@ -7,7 +7,7 @@
 // 	echo_html(DOMNodeHelper::outerHTML($node));
 // }
 
-require_once 'HTML_Scraper.php';
+require_once '../HTML_Scraper.php';
 
 $doc = new HTML_Scraper;
 
