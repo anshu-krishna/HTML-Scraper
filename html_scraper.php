@@ -360,12 +360,12 @@ final class DOMNodeHelper {
 				break;
 			default:
 				$ret = [];
-				$ncount = $nodes->length;
-				foreach($items as $item) {
-					if($item >= 0) {
-						$ret[] = $nodes->item($item);
+				$ncount = $children->length;
+				foreach($indexes as $index) {
+					if($index >= 0) {
+						$ret[] = $children->item($index);
 					} else {
-						$ret[] = $nodes->item($ncount + $item);
+						$ret[] = $children->item($ncount + $index);
 					}
 				}
 				return $ret;
