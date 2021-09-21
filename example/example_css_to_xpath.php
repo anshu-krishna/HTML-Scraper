@@ -25,7 +25,10 @@
 <header>CSS</header>
 <header>XPath</header>
 <?php
-require_once '../html_scraper.php';
+require_once 'vendor/autoload.php';
+
+use Krishna\HTMLScraper;
+
 $examples = [
 	'div',
 	'div.abc',
@@ -47,7 +50,7 @@ $examples = [
 $examples = array_map(function($selector) {
 	return implode(PHP_EOL, array_map(function($str) {
 		return "<span>" . htmlspecialchars($str) . "</span>";
-	}, [$selector, HTML_Scraper::CSS_to_Xpath($selector)]));
+	}, [$selector, HTMLScraper::CSS_to_Xpath($selector)]));
 }, $examples);
 
 echo implode(PHP_EOL, $examples);

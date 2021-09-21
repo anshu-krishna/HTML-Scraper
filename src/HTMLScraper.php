@@ -1,21 +1,22 @@
 <?php
-/*
-Author: Anshu Krishna
-Contact: anshu.krishna5@gmail.com
-Date: 22-Nov-2018
-Description: Set of PHP classes for simplifing data extraction from HTML.
- */
-final class HTML_Scraper {
+namespace Krishna;
+
+use DOMDocument;
+use DOMNode;
+use DOMNodeList;
+use DOMXPath;
+
+class HTMLScraper {
 	const Extract_innerHTML = 'innerHTML';
 	const Extract_outerHTML = 'outerHTML';
 	const Extract_textContent = 'textContent';
 	const Extract_textContentTrim = 'textContentTrim';
 	
-	private static function map_node($type, &$node) {
+	protected static function map_node($type, &$node) {
 		if(!($node instanceof DOMNode)) {
-			return NULL;
+			return null;
 		}
-		switch(TRUE) {
+		switch(true) {
 			case ($type === 'innerHTML'):
 				return DOMNodeHelper::innerHTML($node);
 				break;
@@ -32,16 +33,16 @@ final class HTML_Scraper {
 				return $type($node);
 				break;
 			default:
-				return NULL;
+				return null;
 				break;
 		}
 	}
 
     protected $doc = null;
 	
-	public function __construct(string $source_html = NULL, int $options = NULL) {
+	public function __construct(?string $source_html = null, ?int $options = null) {
 		$this->doc = new DOMDocument('1.0', 'utf-8');
-		if($source_html !== NULL) {
+		if($source_html !== null) {
 			$this->load_HTML_str($source_html, $options);
 		}
 	}
@@ -54,30 +55,31 @@ final class HTML_Scraper {
 		return $this->doc->textContent;
 	}
 	
-    public function load_HTML_str(string $source, int $options = NULL) : bool {
+    public function load_HTML_str(?string $source, ?int $options = null) : bool {
 		$opt = LIBXML_NOERROR | LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED;
-		if($options !== NULL) {
+		if($options !== null) {
 			$opt = $opt | $options;
 		}
         return $this->doc->loadHTML(mb_convert_encoding($source, 'HTML-ENTITIES', 'UTF-8'), $opt);
 	}
 	
-	public function load_HTML_file(string $filename, int $options = NULL, array $context = NULL) : bool {
-		$source = ($context === NULL) ? file_get_contents($filename, FALSE) : file_get_contents($filename, FALSE, stream_context_create($context));
-		if($source === FALSE) {
-			return FALSE;
+	public function load_HTML_file(string $filename, ?int $options = null, ?array $context = null) : bool {
+		$source = ($context === null) ? file_get_contents($filename, false) : file_get_contents($filename, false, stream_context_create($context));
+		if($source === false) {
+			return false;
 		}
 		return $this->load_HTML_str($source, $options);
 	}
 
-	public function xpath(string $expr, int ...$items) {
+	public function xpath(string $expr, int ...$items) : DOMNode | DOMNodeList | array | null {
 		$xpath = new DOMXPath($this->doc);
 		$nodes = $xpath->query($expr);
-		if($nodes === FALSE) {
-			return NULL;
+		if($nodes === false) {
+			return null;
 		}
 		$icount = count($items);
-		switch(TRUE) {
+		$item = null;
+		switch(true) {
 			case ($icount === 0):
 				return $nodes;
 				break;
@@ -101,7 +103,7 @@ final class HTML_Scraper {
 				break;
 		}
 
-		if($item !== NULL) {
+		if($item !== null) {
 			if($item >=0 ) {
 				return $nodes->item($item);
 			} else {
@@ -111,16 +113,16 @@ final class HTML_Scraper {
 		return $nodes;
 	}
 
-	public function querySelector(string $selector, int ...$items) {
+	public function querySelector(string $selector, int ...$items) : DOMNode | DOMNodeList | array | null {
 		return $this->xpath(static::CSS_to_Xpath($selector), ...$items);
 	}
 
-	public function xpath_extract($mapper, string $expr, int ...$items) {
+	public function xpath_extract(string | callable $mapper, string $expr, int ...$items) {
 		$nodes = $this->xpath($expr, ...$items);
-		if($nodes === NULL) {
-			return NULL;
+		if($nodes === null) {
+			return null;
 		}
-		switch(TRUE) {
+		switch(true) {
 			case ($mapper === 'innerHTML'):
 			case ($mapper === 'outerHTML'):
 			case ($mapper === 'textContent'):
@@ -135,22 +137,22 @@ final class HTML_Scraper {
 					}
 					return $ret;
 				} else {
-					return NULL;
+					return null;
 				}
 				break;
 			default:
 				trigger_error('Invalid mapper value in xpath_extract', E_USER_WARNING);
-				return NULL;
+				return null;
 				break;
 		}
 	}
 
-	public function querySelector_extract($mapper, string $selector, int ...$items) {
+	public function querySelector_extract(string | callable $mapper, string $selector, int ...$items) {
 		$nodes = $this->xpath(static::CSS_to_Xpath($selector), ...$items);
-		if($nodes === NULL) {
-			return NULL;
+		if($nodes === null) {
+			return null;
 		}
-		switch(TRUE) {
+		switch(true) {
 			case ($mapper === 'innerHTML'):
 			case ($mapper === 'outerHTML'):
 			case ($mapper === 'textContent'):
@@ -165,18 +167,18 @@ final class HTML_Scraper {
 					}
 					return $ret;
 				} else {
-					return NULL;
+					return null;
 				}
 				break;
 			default:
 				trigger_error('Invalid mapper value in querySelector_extract', E_USER_WARNING);
-				return NULL;
+				return null;
 				break;
 		}
 	}
 
-	public static function new_from($source) {
-		switch(TRUE) {
+	public static function new_from(string | DOMNodeList | DOMNode $source) : static | array {
+		switch(true) {
 			case ($source instanceof DOMNodeList):
 				$Return = [];
 				foreach($source as $n) {
@@ -307,137 +309,3 @@ final class HTML_Scraper {
 		return implode('|', $paths);
 	}
 }
-
-final class DOMNodeHelper {
-	public static function innerHTML(DOMNode &$node) : string {
-		$owner = $node->ownerDocument;
-		$Return = [];
-		foreach($node->childNodes as $n) {
-			$Return[] = $owner->saveHTML($n);
-		}
-		return implode('', $Return);
-	}
-
-	public static function outerHTML(DOMNode &$node) : string {
-		return $node->ownerDocument->saveHTML($node);
-	}
-
-	public static function xpath(DOMNode &$node, string $expr, int ...$items) {
-		$xpath = new DOMXPath($node->ownerDocument);
-		$path = $node->getNodePath();
-		$nodes = $xpath->query($path . $expr);
-		if($nodes === FALSE) {
-			return NULL;
-		}
-		$icount = count($items);
-		switch(TRUE) {
-			case ($icount === 1):
-				return $nodes->item($items[0]);
-				break;
-			case ($icount > 1):
-				$ret = [];
-				$ncount = $nodes->length;
-				foreach($items as $item) {
-					if($item >= 0) {
-						$ret[] = $nodes->item($item);
-					} else {
-						$ret[] = $nodes->item($ncount + $item);
-					}
-				}
-				return $ret;
-				break;
-			default:
-				return $nodes;
-				break;
-		}
-	}
-
-	public static function querySelector(DOMNode &$node, string $selector, int ...$items) {
-		return static::xpath($node, HTML_Scraper::CSS_to_Xpath($selector), ...$items);
-	}
-
-	public static function getChildNode(DOMNode &$node, int ...$indexes) {
-		$children = $node->childNodes;
-		$icount = count($indexes);
-		switch(TRUE) {
-			case ($icount === 0):
-				return $children;
-				break;
-			case ($icount === 1):
-				return $children->item($indexes[0]);
-				break;
-			default:
-				$ret = [];
-				$ncount = $children->length;
-				foreach($indexes as $index) {
-					if($index >= 0) {
-						$ret[] = $children->item($index);
-					} else {
-						$ret[] = $children->item($ncount + $index);
-					}
-				}
-				return $ret;
-				break;
-		}
-	}
-
-	public static function getChildElements(DOMNode &$node, int ...$indexes) : array {
-		$childNodes = $node->childNodes;
-		$len = $childNodes->length;
-		$childElements = [];
-		for($i = 0; $i < $len; $i++) {
-			if($childNodes[$i]->nodeType === XML_ELEMENT_NODE) {
-				$childElements[] = &$childNodes[$i];
-			}
-		}
-		if(empty($indexes)) {
-			return $childElements;
-		}
-		$length = count($childElements);
-		$Return = [];
-		foreach ($indexes as $index) {
-			if(0 <= $index && $index < $length) {
-				$Return[] = &$childElements[$index];
-			} elseif ($index < 0 && -$length <= $index) {
-				$Return[] = &$childElements[$length + $index];
-			} else {
-				$Return[] = NULL;
-			}
-		}
-		return $Return;
-	}
-
-	public static function remove_self(DOMNode &$node) {
-		$node->parentNode->removeChild($node);
-	}
-
-	public static function filter_child_elements_xpath(DOMNode &$node, string ...$exprs) {
-		$xpath = new DOMXPath($node->ownerDocument);
-		$path = $node->getNodePath();
-		foreach($exprs as $expr) {
-			$nodes = $xpath->query($path . $expr);
-			if($nodes !== NULL) {
-				$nodes = iterator_to_array($nodes);
-				foreach($nodes as &$node) {
-					$node->parentNode->removeChild($node);
-				}
-			}
-		}
-	}
-
-	public static function filter_child_elements_querySelector(DOMNode &$node, string ...$selectors) {
-		$exprs = [];
-		foreach($selectors as $selector) {
-			$exprs[] = HTML_Scraper::CSS_to_Xpath($selector);
-		}
-		static::filter_child_elements_xpath($node, ...$exprs);
-	}
-
-	public static function filter_child_elements_index(DOMNode &$node, int ...$indexes) {
-		$elements = static::getChildElements($node, ...$indexes);
-		foreach($elements as &$element) {
-			$element->parentNode->removeChild($element);
-		}
-	}
-}
-?>

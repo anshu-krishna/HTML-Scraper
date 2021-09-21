@@ -1,15 +1,18 @@
+<style>
+	pre {
+		white-space: pre-wrap;
+	}
+</style>
+<pre>
 <?php
-// function echo_html(string $html_source) {
-// 	echo '<pre>', htmlentities($html_source), '</pre>';
-// }
+require_once 'vendor/autoload.php';
 
-// function echo_DOMNode(DOMNode $node) {
-// 	echo_html(DOMNodeHelper::outerHTML($node));
-// }
+use Krishna\DOMNodeHelper;
+use Krishna\HTMLScraper;
 
-require_once '../HTML_Scraper.php';
+const TrimmedText = HTMLScraper::Extract_textContentTrim;
 
-$doc = new HTML_Scraper;
+$doc = new HTMLScraper();
 
 if(!$doc->load_HTML_file('sample_data_file.html')) {
 	echo 'Unable to load data';
@@ -26,13 +29,13 @@ if(!$doc->load_HTML_file('sample_data_file.html')) {
 
 $data = [];
 
-$data['title'] = $doc->querySelector_extract('textContentTrim', 'div.fic-title h1[property="name"]', 0);
+$data['title'] = $doc->querySelector_extract(TrimmedText, 'div.fic-title h1[property="name"]', 0);
 
 $data['url'] = $doc->xpath_extract(function($meta) {
 	return $meta->getAttribute('content');
 }, '//meta[@property="og:url"]', 0);
 
-$data['auth'] = $doc->querySelector_extract('textContentTrim', 'div.fic-title h4[property="author"] span[property="name"]', 0);
+$data['auth'] = $doc->querySelector_extract(TrimmedText, 'div.fic-title h4[property="author"] span[property="name"]', 0);
 
 $data['auth_link'] = $doc->querySelector_extract(function(&$a) {
 	return 'https://www.royalroad.com' . $a->getAttribute('href');
@@ -56,11 +59,11 @@ $data['words'] = $doc->querySelector_extract(function(&$li) {
 	return 275 * $pages;
 }, 'li[property="numberOfPages"]', 0);
 
-$data['desc'] = $doc->querySelector_extract(function(&$div) {
+$data['desc'] = htmlspecialchars($doc->querySelector_extract(function(&$div) {
 	return trim(DOMNodeHelper::innerHTML($div));
-}, 'div.description div[property="description"]', 0);
+}, 'div.description div[property="description"]', 0));
 
-$data['tags'] = $doc->querySelector_extract('textContentTrim', 'span.tags span[property="genre"]');
+$data['tags'] = $doc->querySelector_extract(TrimmedText, 'span.tags span[property="genre"]');
 
 $replace = NULL;
 if($data['url'] !== NULL && preg_match("/http[s]?:\/\/www\.royalroad\.com\/(.+)\/?/", $data['url'], $mtc)) {
@@ -85,6 +88,4 @@ $data['ch_links'] = $doc->querySelector_extract(function(&$row) use ($replace) {
 if(is_array($data['ch_links'])) {
 	$data['chaps'] = count($data['ch_links']);
 }
-
-var_dump($data);
-?>
+echo json_encode($data, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE | JSON_PARTIAL_OUTPUT_ON_ERROR);

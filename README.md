@@ -18,9 +18,14 @@ For *basic* documentation see the DOC file.
 ### Example
 ```php
 <?php
-require_once 'HTML_Scraper.php';
+require_once 'vendor/autoload.php';
 
-$doc = new HTML_Scraper;
+use Krishna\DOMNodeHelper;
+use Krishna\HTMLScraper;
+
+const TrimmedText = HTMLScraper::Extract_textContentTrim;
+
+$doc = new HTMLScraper();
 
 if(!$doc->load_HTML_file('https://www.royalroad.com/fiction/10073/the-wandering-inn')) {
 	echo 'Unable to load data';
@@ -29,18 +34,17 @@ if(!$doc->load_HTML_file('https://www.royalroad.com/fiction/10073/the-wandering-
 
 $data = [];
 
-$data['title'] = $doc->querySelector_extract('textContentTrim', 'div.fic-title h1[property="name"]', 0);
+$data['title'] = $doc->querySelector_extract(TrimmedText, 'div.fic-title h1[property="name"]', 0);
 
 $data['url'] = $doc->xpath_extract(function($meta) {
 	return $meta->getAttribute('content');
 }, '//meta[@property="og:url"]', 0);
 
-$data['description'] = $doc->querySelector_extract(function(&$div) {
+$data['description'] = htmlspecialchars($doc->querySelector_extract(function(&$div) {
 	return trim(DOMNodeHelper::innerHTML($div));
-}, 'div.description div[property="description"]', 0);
+}, 'div.description div[property="description"]', 0));
 
-$data['tags'] = $doc->querySelector_extract('textContentTrim', 'span.tags span[property="genre"]');
+$data['tags'] = $doc->querySelector_extract(TrimmedText, 'span.tags span[property="genre"]');
 
 var_dump($data);
-?>
 ```

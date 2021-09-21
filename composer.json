@@ -1,0 +1,21 @@
+{
+    "name": "anshu-krishna/html-scraper",
+    "description": "A set of PHP classes to simplify data extraction from HTML.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anshu Krishna",
+            "email": "anshu.krishna5@gmail.com"
+        }
+    ],
+    "version": "3.5.0",
+    "require": {
+        "php": ">=8.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Krishna\\": "src"
+        }
+    }
+}

@@ -1,16 +1,16 @@
-# Class HTML_Scraper
+# Class HTMLScraper
 ### Static Functions:
 -	`new_from($source)`
 
-	Create a new HTML_Scraper object from the passed source.  
+	Create a new HTMLScraper object from the passed source.  
 	`$source` can be of type `DOMNodeList`, `DOMNode` or `string`.
 
 	**Returns:**  
 	
 	| Type | Description |
 	|---|---|
-	| `array` | When `$source` is an instance of `DOMNodeList` then returns an `array` of `HTML_Scraper` objects. |
-	| `HTML_Scraper` | When `$source` is an instance of `DOMNode` or a `string` |
+	| `array` | When `$source` is an instance of `DOMNodeList` then returns an `array` of `HTMLScraper` objects. |
+	| `HTMLScraper` | When `$source` is an instance of `DOMNode` or a `string` |
 
 
 -	`CSS_to_Xpath(string $path) : string`
@@ -20,7 +20,7 @@
 ### Functions:
 -	`__toString() : string`
 
-	Magic function to convert `HTML_Scraper` into a `string` containing the HTML code of the loaded document.
+	Magic function to convert `HTMLScraper` into a `string` containing the HTML code of the loaded document.
 
 
 -	`textContent() : string`
@@ -43,7 +43,7 @@
 	Load HTML from a file.
 
 	-	`$options`  
-		*see `$options` in `HTML_Scraper->load_HTML_str()`*
+		*see `$options` in `HTMLScraper->load_HTML_str()`*
 
 	-	`$context`  
 		*see `$context` in `stream_context_create()`*
@@ -74,11 +74,11 @@
 
 -	`querySelector(string $selector, int ...$items)`
 	
-	Same as `HTML_Scraper->xpath()` except that it uses CSS selector instead of *XPath* path expression.
+	Same as `HTMLScraper->xpath()` except that it uses CSS selector instead of *XPath* path expression.
 
 -	`xpath_extract($mapper, string $expr, int ...$items)`
 
-	Find `DOMNode`(s) in the same way as in `HTML_Scraper->xpath()` then extract data from the `DOMNode`(s) as specified by the `$mapper`.
+	Find `DOMNode`(s) in the same way as in `HTMLScraper->xpath()` then extract data from the `DOMNode`(s) as specified by the `$mapper`.
 
 	-	`$mapper`  
 		It can be any one of the `string` specified below or a `function` that takes a `DOMNode` and returns any extracted value.  
@@ -91,7 +91,7 @@
 
 -	`querySelector_extract($mapper, string $selector, int ...$items)`
 
-	Same as `HTML_Scraper->xpath_extract()` except that it uses CSS selector instead of *XPath* path expression.
+	Same as `HTMLScraper->xpath_extract()` except that it uses CSS selector instead of *XPath* path expression.
 
 ---
 
@@ -111,7 +111,7 @@
 
 -	`xpath(DOMNode &$node, string $expr, int ...$items)`
 
-	Similar to `HTML_Scraper->xpath()` except that it works on a `DOMNode` instead of the `HTML_Scraper`'s `DOMDocument`.
+	Similar to `HTMLScraper->xpath()` except that it works on a `DOMNode` instead of the `HTMLScraper`'s `DOMDocument`.
 
 -	`querySelector(DOMNode &$node, string $selector, int ...$items)`
 
@@ -122,7 +122,7 @@
 	Get one or more child nodes of the `DOMNode`.
 
 	-	`$indexes`  
-		*See `$items` in `HTML_Scraper->expath()`.*
+		*See `$items` in `HTMLScraper->xpath()`.*
 
 	**Returns:**
 
@@ -154,4 +154,4 @@
 	Removes the child elements of the passed `DOMNode` specified by the `...$indexes`.
 
 	-	`$indexes`  
-		*See `$items` in `HTML_Scraper->expath()`.*
+		*See `$items` in `HTMLScraper->xpath()`.*

@@ -1,0 +1,24 @@
+{
+    "name": "anshu-krishna/scraper-example",
+    "description": "Examples for HTMLScraper",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Anshu Krishna",
+            "email": "anshu.krishna5@gmail.com"
+        }
+    ],
+    "version": "1.0.0",
+    "repositories": [{
+        "type": "path",
+        "url": "..",
+        "options": {
+            "symlink": true
+        }
+    }],
+    "require": {
+        "php": ">=8.0.0",
+        "anshu-krishna/html-scraper" : "*"
+    }
+}
