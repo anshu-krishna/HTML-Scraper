@@ -1,6 +1,11 @@
 # HTML Scraper
 A set of PHP classes to simplify data extraction from HTML.
 
+### Installation
+```
+composer require anshu-krishna/html-scraper
+```
+
 ---
 
 >Base code for the *CSS_to_Xpath* method in *HTML_Scraper* was cloned from [https://github.com/zendframework/zend-dom](https://github.com/zendframework/zend-dom).  
