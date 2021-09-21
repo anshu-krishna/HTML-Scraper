@@ -8,7 +8,7 @@ composer require anshu-krishna/html-scraper
 
 ---
 
->Base code for the *CSS_to_Xpath* method in *HTML_Scraper* was cloned from [https://github.com/zendframework/zend-dom](https://github.com/zendframework/zend-dom).  
+>Base code for the *CSS_to_Xpath* method in *HTMLScraper* was cloned from [https://github.com/zendframework/zend-dom](https://github.com/zendframework/zend-dom).  
 >Zend Framework
 >: [http://framework.zend.com/](http://framework.zend.com/)  
 >Repository
