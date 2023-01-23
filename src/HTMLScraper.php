@@ -60,7 +60,8 @@ class HTMLScraper {
 		if($options !== null) {
 			$opt = $opt | $options;
 		}
-        return $this->doc->loadHTML(mb_convert_encoding($source, 'HTML-ENTITIES', 'UTF-8'), $opt);
+        // return $this->doc->loadHTML(mb_convert_encoding($source, 'HTML-ENTITIES', 'UTF-8'), $opt);
+		return $this->doc->loadHTML($source, $opt);
 	}
 	
 	public function load_HTML_file(string $filename, ?int $options = null, ?array $context = null) : bool {
